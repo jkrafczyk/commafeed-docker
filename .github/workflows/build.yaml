@@ -19,4 +19,4 @@ jobs:
          push: true
          cache-from: type=gha
          cache-to: type=gha,mode=max
-         tags: ghcr.io/jkrafczy/commafeed-docker:latest
+         tags: ghcr.io/jkrafczyk/commafeed-docker:latest
