@@ -15,8 +15,8 @@ jobs:
        uses: docker/setup-buildx-action@v2
      - name: Build and push
        uses: docker/build-push-action@v3
-       cache-from: type=gha
-       cache-to: type=gha,mode=max
        with:
          push: true
-         tags: jkrafczy/commafeed-docker:latest
+         cache-from: type=gha
+         cache-to: type=gha,mode=max
+         tags: ghcr.io/jkrafczy/commafeed-docker:latest
