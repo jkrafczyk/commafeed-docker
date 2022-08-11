@@ -5,27 +5,24 @@ FROM eclipse-temurin:${JAVA_IMAGE_VERSION}-jre
 ARG JAVA_IMAGE_VERSION
 ARG COMMAFEED_VERSION
 
-RUN mkdir -p /home/commafeed/log && \
+RUN mkdir -p /app /config && \
     curl --fail --location --silent \
     https://github.com/Athou/commafeed/releases/download/$COMMAFEED_VERSION/commafeed.jar \
-    -o /home/commafeed/commafeed.jar && \
+    -o /app/commafeed.jar && \
     curl --fail --location --silent \
     https://raw.githubusercontent.com/Athou/commafeed/$COMMAFEED_VERSION/config.yml.example \
-    -o /home/commafeed/config.yml
+    -o /config/config.yaml && \
+    sed -Ei 's/\/home\/commafeed\//\/tmp\//g' /config/config.yaml
 
-RUN chown -R 1000:1000 /home/commafeed && \
-    chown root /home/commafeed/commafeed.jar && \
-    chmod a-w /home/commafeed/commafeed.jar
-
-USER 1000
-
-WORKDIR /home/commafeed
 
 EXPOSE 8082
 EXPOSE 8084
 
-ENTRYPOINT [ "/usr/bin/env", "java", "-Djava.net.preferIPv4Stack=true", "-jar", "/home/commafeed/commafeed.jar" ]
-CMD [ "server", "/home/commafeed/config.yml" ]
+USER 1000
+WORKDIR /tmp
+
+ENTRYPOINT [ "/opt/java/openjdk/bin/java", "-Djava.net.preferIPv4Stack=true", "-jar", "/app/commafeed.jar" ]
+CMD [ "server", "/config/config.yaml" ]
 
 HEALTHCHECK --interval=5s --start-period=30s --timeout=2s CMD [ "curl", "--fail", "http://127.0.0.1:8084/ping" ]
 
