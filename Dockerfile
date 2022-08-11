@@ -1,19 +1,19 @@
 ARG JAVA_IMAGE_VERSION=17
 ARG COMMAFEED_VERSION=2.6.0
 
-FROM eclipse-temurin:${JAVA_IMAGE_VERSION}-jre
+FROM eclipse-temurin:${JAVA_IMAGE_VERSION}-jre-alpine
 ARG JAVA_IMAGE_VERSION
 ARG COMMAFEED_VERSION
 
-RUN mkdir -p /app /config && \
+RUN apk --no-cache add curl && \
+    mkdir -p /app /config && \
     curl --fail --location --silent \
     https://github.com/Athou/commafeed/releases/download/$COMMAFEED_VERSION/commafeed.jar \
     -o /app/commafeed.jar && \
     curl --fail --location --silent \
     https://raw.githubusercontent.com/Athou/commafeed/$COMMAFEED_VERSION/config.yml.example \
-    -o /config/config.yaml 
-
-RUN sed -Ei 's/\/home\/commafeed\//\/tmp\//g' /config/config.yaml
+    -o /config/config.yaml && \
+    sed -Ei 's/\/home\/commafeed\//\/tmp\//g' /config/config.yaml
 
 
 EXPOSE 8082
