@@ -27,8 +27,8 @@ EXPOSE 8084
 ENTRYPOINT [ "/usr/bin/env", "java", "-Djava.net.preferIPv4Stack=true", "-jar", "/home/commafeed/commafeed.jar" ]
 CMD [ "server", "/home/commafeed/config.yml" ]
 
+HEALTHCHECK --interval=5s --start-period=30s --timeout=2s CMD [ "curl", "--fail", "http://127.0.0.1:8084/ping" ]
+
 LABEL org.opencontainers.image.title Commafeed RSS Reader $COMMAFEED_VERSION running on java $JAVA_IMAGE_VERSION
 LABEL org.opencontainers.image.source https://github.com/jkrafczyk/commafeed-docker
 LABEL org.opencontainers.image.version $COMMAFEED_VERSION
-
-# TODO: Health probes
