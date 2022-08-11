@@ -27,5 +27,5 @@ jobs:
          push: true
          cache-from: type=gha
          cache-to: type=gha,mode=max
-         build-args: COMMAFEED_VERSION=${{ github.events.release.name }}
-         tags: ghcr.io/jkrafczyk/commafeed-docker:${{ github.events.release.name }}
+         build-args: COMMAFEED_VERSION=${{ github.event.release.tag_name }}
+         tags: ghcr.io/jkrafczyk/commafeed-docker:${{ github.event.release.tag_name }}
